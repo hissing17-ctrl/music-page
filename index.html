@@ -1,46 +1,108 @@
-<div style="position: relative; width: 500px;"><img style="width: 100%; display: block;" src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&amp;fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FbV7P2n%2FdJMb99TgTSB%2FAAAAAAAAAAAAAAAAAAAAAEKZhjRvJhIsn5ihewGdx3bEEbZ-4t1ZP2MLxvzjikmh%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1774969199%26allow_ip%3D%26allow_referer%3D%26signature%3DcmlnXHC1Q22Np%252BwZ7wAWn1kit50%253D" />
-<div id="musicBtn" style="position: absolute; top: 362px; left: 138px; width: 22px; height: 22px; border-radius: 50%; background: linear-gradient(135deg, #ff9ecb, #ff6fa5); color: #fff; font-size: 11px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 8px rgba(255,105,180,0.4); transition: all 0.15s ease; z-index: 10;">▶</div>
-</div>
-<p><iframe src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/minchea/oqttjj6jo1g7&amp;auto_play=false&amp;hide_related=true&amp;show_comments=false&amp;show_user=false&amp;show_reposts=false&amp;visual=false" id="sc-widget" width="1" height="1" frameborder="0" scrolling="no"></iframe></p>
-<script src="https://w.soundcloud.com/player/api.js"></script>
-<script>
-  const widget = SC.Widget(document.getElementById("sc-widget"));
-  const btn = document.getElementById("musicBtn");
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Heaven Music</title>
+</head>
+<body style="margin:0; padding:0;">
 
-  let playing = false;
+  <div style="position:relative; width:500px;">
+    <img
+      src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FbV7P2n%2FdJMb99TgTSB%2FAAAAAAAAAAAAAAAAAAAAAEKZhjRvJhIsn5ihewGdx3bEEbZ-4t1ZP2MLxvzjikmh%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1774969199%26allow_ip%3D%26allow_referer%3D%26signature%3DcmlnXHC1Q22Np%252BwZ7wAWn1kit50%253D"
+      style="width:100%; display:block;"
+      alt="Heaven cover"
+    />
 
-  btn.addEventListener("click", function () {
-    if (playing) {
-      widget.pause();
-    } else {
-      widget.play();
-    }
-  });
+    <div
+      id="musicBtn"
+      style="
+        position:absolute;
+        top:362px;
+        left:138px;
+        width:22px;
+        height:22px;
+        border-radius:50%;
+        background:linear-gradient(135deg, #ff9ecb, #ff6fa5);
+        color:#fff;
+        font-size:11px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        cursor:pointer;
+        box-shadow:0 2px 8px rgba(255,105,180,0.4);
+        transition:all 0.15s ease;
+        z-index:10;
+        user-select:none;
+      "
+    >▶</div>
+  </div>
 
-  widget.bind(SC.Widget.Events.PLAY, function () {
-    playing = true;
-    btn.textContent = "❚❚";
-  });
+  <iframe
+    id="sc-widget"
+    allow="autoplay"
+    width="1"
+    height="1"
+    frameborder="0"
+    scrolling="no"
+    style="position:absolute; left:-9999px; top:-9999px; opacity:0; pointer-events:none;"
+    src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/minchea/oqttjj6jo1g7&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&visual=false"
+  ></iframe>
 
-  widget.bind(SC.Widget.Events.PAUSE, function () {
-    playing = false;
-    btn.textContent = "▶";
-  });
+  <script src="https://w.soundcloud.com/player/api.js"></script>
+  <script>
+    const iframe = document.getElementById("sc-widget");
+    const btn = document.getElementById("musicBtn");
+    const widget = SC.Widget(iframe);
 
-  widget.bind(SC.Widget.Events.FINISH, function () {
-    playing = false;
-    btn.textContent = "▶";
-  });
+    let playing = false;
+    let ready = false;
 
-  btn.addEventListener("mousedown", function () {
-    btn.style.transform = "scale(0.9)";
-  });
+    widget.bind(SC.Widget.Events.READY, function () {
+      ready = true;
+      console.log("SoundCloud widget ready");
+    });
 
-  btn.addEventListener("mouseup", function () {
-    btn.style.transform = "scale(1)";
-  });
+    btn.addEventListener("click", function () {
+      if (!ready) {
+        console.log("Widget not ready yet");
+        return;
+      }
 
-  btn.addEventListener("mouseleave", function () {
-    btn.style.transform = "scale(1)";
-  });
-</script>
+      if (playing) {
+        widget.pause();
+      } else {
+        widget.play();
+      }
+    });
+
+    widget.bind(SC.Widget.Events.PLAY, function () {
+      playing = true;
+      btn.textContent = "❚❚";
+    });
+
+    widget.bind(SC.Widget.Events.PAUSE, function () {
+      playing = false;
+      btn.textContent = "▶";
+    });
+
+    widget.bind(SC.Widget.Events.FINISH, function () {
+      playing = false;
+      btn.textContent = "▶";
+    });
+
+    btn.addEventListener("mousedown", function () {
+      btn.style.transform = "scale(0.9)";
+    });
+
+    btn.addEventListener("mouseup", function () {
+      btn.style.transform = "scale(1)";
+    });
+
+    btn.addEventListener("mouseleave", function () {
+      btn.style.transform = "scale(1)";
+    });
+  </script>
+
+</body>
+</html>
